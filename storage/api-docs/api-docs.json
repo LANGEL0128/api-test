@@ -1,0 +1,322 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Test",
+        "description": "Esta es una API de prueba para mostrar a las empresas y poder ser contratado. Espero que le guste :)",
+        "contact": {
+            "email": "lanlion000128@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Inicia la sesión",
+                "description": "Inicia la sesión del usuario",
+                "operationId": "Iniciar Sesión",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "schema": "Request",
+                                "title": "Title",
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "title": "Correo",
+                                        "description": "El correo del usuario a loguear",
+                                        "type": "string",
+                                        "example": "ddf@gmail.com"
+                                    },
+                                    "password": {
+                                        "title": "Contraseña",
+                                        "description": "La contraseña del usuario a loguear",
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "ddf@gmail.com",
+                                    "password": "123456"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                                    "token_type": "bearer",
+                                    "expires_in": 3600
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Mostrar Datos del Usaurio",
+                "description": "Mostrar Datos del Usaurio logueado",
+                "operationId": "Mostrar Datos del Usaurio",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Ha cerrado sesión correctamente"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/logout": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Cierra la sesión",
+                "description": "Cerrar la sesión del usuario logueado",
+                "operationId": "Cerrar Sesión",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Ha cerrado sesión correctamente"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresca el access_token",
+                "description": "Refresca el access_token del usuario",
+                "operationId": "Refrescar Token",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                                    "token_type": "bearer",
+                                    "expires_in": 3600
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Registrar un usuario",
+                "operationId": "d764dd091cc4494ae0baf360b03319f3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "schema": "Request",
+                                "title": "Title",
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "title": "Nombre",
+                                        "description": "Nombre del Usuario",
+                                        "type": "string",
+                                        "example": "Domingo Díaz Feriado"
+                                    },
+                                    "email": {
+                                        "title": "Correo",
+                                        "description": "Correo del Usuario",
+                                        "type": "string",
+                                        "example": "ddf@gmail.com"
+                                    },
+                                    "photo": {
+                                        "title": "Imagen",
+                                        "description": "Imagen del Perfil",
+                                        "type": "file",
+                                        "format": "binary",
+                                        "example": null,
+                                        "nullable": true
+                                    },
+                                    "password": {
+                                        "title": "Contraseña",
+                                        "description": "Contraseña del Usuario",
+                                        "type": "string",
+                                        "pattern": "\\w{6,}",
+                                        "example": "123456"
+                                    },
+                                    "role": {
+                                        "title": "Rol",
+                                        "description": "Rol del Usuario. 1 -> Escritor y 2 -> Lector",
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "pattern": "^(1|2)$",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Domingo Díaz Feriado",
+                                    "email": "ddf@gmail.com",
+                                    "password": "123456",
+                                    "photo": null,
+                                    "role": 1
+                                }
+                            }
+                        },
+                        "application/json": {
+                            "schema": {},
+                            "example": {
+                                "name": "Domingo Díaz Feriado",
+                                "email": "ddl@gmail.com",
+                                "photo": null,
+                                "password": "123456",
+                                "role": 1
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                                    "token_type": "bearer",
+                                    "expires_in": 3600
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "description": "Ha ocurrido un error al validar los datos",
+                                    "error": "El correo es requerido"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
