@@ -19,6 +19,13 @@
     <li>Instalar composer</li>
     <li>Tener PHP 8 instalado</li>
     <li>Correr el comando: composer install</li>
+    <li>Agregue el archivo .env al proyecto</li>
+    <li>Establezca una conexión a una base de datos a través del archivo .env</li>
+    <li>Correr el comando: php artisan migrate:refresh</li>
     <li>Correr el comando: php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"</li>
     <li>Correr el comando: php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"</li>
+    <li>Si hay una carpeta storage dentro de la carpeta public entonces bórrela</li>
+    <li>Correr el comando: php artisan storage:link</li>
+    <li>Correr el comando: php artisan serve</li>
+    <li>Abra la url http://127.0.0.1:8000/api/documentation en su navegador</li>
 </ol>
