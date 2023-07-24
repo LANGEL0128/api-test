@@ -56,7 +56,26 @@ class User extends Authenticatable implements JWTSubject
                 $o->photo = '/storage/' . request()->file('photo')->store('users', 'public');
             }
             $o->password = Hash::make($o->password);
-            // $o->save();
+        });
+
+        static::created(function($o) {
+            if(request()->post('role') == 1) {
+                Writerprofile::create([
+                    'user_id' => $o->id,
+                    'nickname' => request()->post('nickname'),
+                    'principal_gender' => request()->post('principal_gender'),
+                    'principal_gender' => request()->post('principal_gender'),
+                    'description' => request()->post('description'),
+                    'birth_date' => request()->post('birth_date'),
+                    'status' => request()->post('status'),
+                ]);
+            } else if(request()->post('role') == 2) {
+                Readerprofile::create([
+                    'user_id' => $o->id,
+                    'favorite_gender' => request()->post('favorite_gender'),
+                    'reading_hours' => request()->post('reading_hours'),
+                ]);
+            }
         });
     }
 

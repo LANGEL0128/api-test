@@ -98,7 +98,15 @@
                             "application/json": {
                                 "schema": {},
                                 "example": {
-                                    "message": "Ha cerrado sesión correctamente"
+                                    "id": 1,
+                                    "name": "Domingo Díaz Feriado",
+                                    "email": "ddf@gmail.com",
+                                    "photo": "null",
+                                    "email_verified_at": null,
+                                    "role": 1,
+                                    "status": true,
+                                    "created_at": "2023-07-23T19:16:06.000000Z",
+                                    "updated_at": "2023-07-23T19:16:06.000000Z"
                                 }
                             }
                         }
@@ -240,7 +248,6 @@
                                         "description": "Imagen del Perfil",
                                         "type": "file",
                                         "format": "binary",
-                                        "example": null,
                                         "nullable": true
                                     },
                                     "password": {
@@ -257,6 +264,49 @@
                                         "format": "int32",
                                         "pattern": "^(1|2)$",
                                         "example": "1"
+                                    },
+                                    "nickname": {
+                                        "title": "Apodo",
+                                        "description": "Apodo del Escritor.",
+                                        "type": "string",
+                                        "example": "LANGEL"
+                                    },
+                                    "birth_date": {
+                                        "title": "Fecha de Nacimiento",
+                                        "description": "Fecha de Nacimiento del Escritor.",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "principal_gender": {
+                                        "title": "Género Principal",
+                                        "description": "Género Principal del Escritor.",
+                                        "type": "string",
+                                        "example": "Emprendimiento"
+                                    },
+                                    "status": {
+                                        "title": "Estado",
+                                        "description": "Estado del Escritor.",
+                                        "type": "string",
+                                        "example": "Soltero"
+                                    },
+                                    "description": {
+                                        "title": "Descripción",
+                                        "description": "Descripción del Escritor.",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "favorite_gender": {
+                                        "title": "Género Favorito",
+                                        "description": "Género Favorito del Lector.",
+                                        "type": "string",
+                                        "example": "Terror"
+                                    },
+                                    "reading_hours": {
+                                        "title": "Horas de Lecturas",
+                                        "description": "Horas de Lecturas del Lector.",
+                                        "type": "integer",
+                                        "example": 2
                                     }
                                 },
                                 "type": "object",

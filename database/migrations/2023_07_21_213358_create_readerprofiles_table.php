@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('readerprofiles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('favorite_gender');
             $table->integer('reading_hours')->default(1);
             $table->timestamps();

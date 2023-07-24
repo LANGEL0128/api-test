@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 /**
  * @OA\Info(
@@ -269,8 +271,7 @@ class AuthController extends Controller
     *                   property="photo",
     *                   type="file",
     *                   nullable=true,
-    *                   format="binary",
-    *                   example=null
+    *                   format="binary"
     *               ),
     *               @OA\Property(
     *                   title="Contraseña",
@@ -288,6 +289,56 @@ class AuthController extends Controller
     *                   example="1",
     *                   format="int32",
     *                   pattern="^(1|2)$"
+    *               ),
+    *               @OA\Property(
+    *                   title="Apodo",
+    *                   description="Apodo del Escritor.",
+    *                   property="nickname",
+    *                   type="string",
+    *                   example="LANGEL"
+    *               ),
+    *               @OA\Property(
+    *                   title="Fecha de Nacimiento",
+    *                   description="Fecha de Nacimiento del Escritor.",
+    *                   property="birth_date",
+    *                   type="string",
+    *                   format="date",
+    *                   example="1990-01-01"
+    *               ),
+    *               @OA\Property(
+    *                   title="Género Principal",
+    *                   description="Género Principal del Escritor.",
+    *                   property="principal_gender",
+    *                   type="string",
+    *                   example="Emprendimiento"
+    *               ),
+    *               @OA\Property(
+    *                   title="Estado",
+    *                   description="Estado del Escritor.",
+    *                   property="status",
+    *                   type="string",
+    *                   example="Soltero"
+    *               ),
+    *               @OA\Property(
+    *                   title="Descripción",
+    *                   description="Descripción del Escritor.",
+    *                   property="description",
+    *                   type="string",
+    *                   nullable=true
+    *               ),
+    *               @OA\Property(
+    *                   title="Género Favorito",
+    *                   description="Género Favorito del Lector.",
+    *                   property="favorite_gender",
+    *                   type="string",
+    *                   example="Terror"
+    *               ),
+    *               @OA\Property(
+    *                   title="Horas de Lecturas",
+    *                   description="Horas de Lecturas del Lector.",
+    *                   property="reading_hours",
+    *                   type="integer",
+    *                   example=2
     *               ),
     *               example={
     *                   "name": "Domingo Díaz Feriado",
@@ -331,28 +382,11 @@ class AuthController extends Controller
     *   ),
     * )
     */
-    public function register()
+    public function register(RegisterRequest $request)
     {
-        $validatedData = Validator::make(request()->post(), [
-            'name' => 'required|max:254',
-            'email' => 'required|email|max:254|unique:users',
-            'password' => 'required|min:6|max:254',
-            'role' => 'required|numeric|in:1,2',
-        ], [
-            'name.required' => 'El nombre es requerido',
-            'name.max' => 'El nombre se excede el límite de caracteres',
-            'email.required' => 'El correo es requerido',
-            'email.required' => 'El correo no es un correo válido',
-            'email.max' => 'El correo se excede del límite de caracteres',
-            'email.unique' => 'El correo ya existe en nuestra base de datos. Pruebe con otro',
-            'password.required' => 'La contraseña es requerida',
-            'password.min' => 'La contraseña debe tener un mínimo de 6 caracteres',
-            'password.max' => 'La contraseña se excede del límite de caracteres',
-            'role.required' => 'El rol es requerido',
-            'role.numeric' => 'El rol debe ser un número entre 1 o 2',
-            'role.in' => 'El rol debe ser un número entre 1 o 2',
-        ]);
-        // Quiero que la imagen sea png o jpg pero si no la envia me salta el error, estuve investigando pero nada concreto. La idea sería que salte el error solo cuando se envía
+        $validatedData = Validator::make($request->all(), $request->rules(), $request->messages());
+        // Quiero que la imagen sea png o jpg pero si no la envia me salta el error, estuve investigando
+        // pero nada concreto. La idea sería que salte el error solo cuando se envía. Si alguien tiene alguna solución :)
         if(request()->hasFile('file') && request()->file('file')->isValid()) {
             $validatedFile = Validator::make(request()->post(), [
                 'photo' => 'file|mimes:jpeg,png,jpg',

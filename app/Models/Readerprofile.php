@@ -10,6 +10,7 @@ class Readerprofile extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'favorite_gender',
         'reading_hours',
     ];
