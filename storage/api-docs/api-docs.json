@@ -69,13 +69,14 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unahutorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "application/json": {
                                 "schema": {},
                                 "example": {
-                                    "message": "Unahutorized"
+                                    "description": "Credenciales Inválidas",
+                                    "error": "invalid_credential"
                                 }
                             }
                         }
@@ -88,9 +89,9 @@
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Mostrar Datos del Usaurio",
-                "description": "Mostrar Datos del Usaurio logueado",
-                "operationId": "Mostrar Datos del Usaurio",
+                "summary": "Mostrar Datos del Usuario",
+                "description": "Mostrar Datos del Usuario logueado",
+                "operationId": "Mostrar Datos del Usuario",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -358,6 +359,634 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Mostrar Usuarios",
+                "description": "Muestra todos los usuarios",
+                "operationId": "Mostrar Usuarios",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Se ha cargado los usuarios correctamente",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "name": "Admin",
+                                            "email": "admin@admin.com",
+                                            "photo": null,
+                                            "email_verified_at": null,
+                                            "role": 3,
+                                            "status": true,
+                                            "created_at": "2023-07-24T20:29:45.000000Z",
+                                            "updated_at": "2023-07-24T20:29:45.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Domingo Díaz Feriado",
+                                            "email": "ddf@gmail.com",
+                                            "photo": null,
+                                            "email_verified_at": null,
+                                            "role": 1,
+                                            "status": true,
+                                            "created_at": "2023-07-24T20:31:02.000000Z",
+                                            "updated_at": "2023-07-24T20:31:02.000000Z",
+                                            "writerprofile": {
+                                                "id": 1,
+                                                "user_id": 2,
+                                                "nickname": "LANGEL",
+                                                "principal_gender": "Emprendimiento",
+                                                "description": null,
+                                                "birth_date": "1990-01-01",
+                                                "status": "Soltero",
+                                                "created_at": "2023-07-24T20:31:02.000000Z",
+                                                "updated_at": "2023-07-24T20:31:02.000000Z"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not Authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Authorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Agregar un usuario",
+                "operationId": "e16e40fc8e2279474249a1b89fb1bcb2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "schema": "Request",
+                                "title": "Title",
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "title": "Nombre",
+                                        "description": "Nombre del Usuario",
+                                        "type": "string",
+                                        "example": "Domingo Díaz Feriado"
+                                    },
+                                    "email": {
+                                        "title": "Correo",
+                                        "description": "Correo del Usuario",
+                                        "type": "string",
+                                        "example": "ddf@gmail.com"
+                                    },
+                                    "photo": {
+                                        "title": "Imagen",
+                                        "description": "Imagen del Perfil",
+                                        "type": "file",
+                                        "format": "binary",
+                                        "nullable": true
+                                    },
+                                    "password": {
+                                        "title": "Contraseña",
+                                        "description": "Contraseña del Usuario",
+                                        "type": "string",
+                                        "pattern": "\\w{6,}",
+                                        "example": "123456"
+                                    },
+                                    "role": {
+                                        "title": "Rol",
+                                        "description": "Rol del Usuario. 1 -> Escritor y 2 -> Lector",
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "pattern": "^(1|2)$",
+                                        "example": "1"
+                                    },
+                                    "nickname": {
+                                        "title": "Apodo",
+                                        "description": "Apodo del Escritor.",
+                                        "type": "string",
+                                        "example": "LANGEL"
+                                    },
+                                    "birth_date": {
+                                        "title": "Fecha de Nacimiento",
+                                        "description": "Fecha de Nacimiento del Escritor.",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "principal_gender": {
+                                        "title": "Género Principal",
+                                        "description": "Género Principal del Escritor.",
+                                        "type": "string",
+                                        "example": "Emprendimiento"
+                                    },
+                                    "status": {
+                                        "title": "Estado",
+                                        "description": "Estado del Escritor.",
+                                        "type": "string",
+                                        "example": "Soltero"
+                                    },
+                                    "description": {
+                                        "title": "Descripción",
+                                        "description": "Descripción del Escritor.",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "favorite_gender": {
+                                        "title": "Género Favorito",
+                                        "description": "Género Favorito del Lector.",
+                                        "type": "string",
+                                        "example": "Terror"
+                                    },
+                                    "reading_hours": {
+                                        "title": "Horas de Lecturas",
+                                        "description": "Horas de Lecturas del Lector.",
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Domingo Díaz Feriado",
+                                    "email": "ddf@gmail.com",
+                                    "password": "123456",
+                                    "photo": null,
+                                    "role": 1
+                                }
+                            }
+                        },
+                        "application/json": {
+                            "schema": {},
+                            "example": {
+                                "name": "Domingo Díaz Feriado",
+                                "email": "ddl@gmail.com",
+                                "photo": null,
+                                "password": "123456",
+                                "role": 1
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Se ha creado el usuario correctamente",
+                                    "data": {
+                                        "message": "Se ha agregado el usuario correctamente",
+                                        "data": {
+                                            "name": "Pedro Diaz",
+                                            "role": "2",
+                                            "email": "pedro@gmail.com",
+                                            "photo": "/storage/users/4hUQC6q4Lff6pfO68ziLx9yaPfYL8RvrYp0FnHPB.png",
+                                            "updated_at": "2023-07-25T01:04:29.000000Z",
+                                            "created_at": "2023-07-25T01:04:29.000000Z",
+                                            "id": 3
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "description": "Ha ocurrido un error al validar los datos",
+                                    "error": "El correo es requerido"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not Authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Authorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Mostrar Datos de un Usuario",
+                "description": "Mostrar Datos de un Usuario",
+                "operationId": "Mostrar Datos de un Usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario a mostrar",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": {
+                                        "id": 4,
+                                        "name": "Luis Angel",
+                                        "email": "luis@gmail.com",
+                                        "photo": "/storage/users/LyqUyd4u2eP9NuWgzxNCuFmAO8U5rF7ftAA5W1sm.png",
+                                        "email_verified_at": null,
+                                        "role": 1,
+                                        "status": true,
+                                        "created_at": "2023-07-25T01:36:06.000000Z",
+                                        "updated_at": "2023-07-25T01:36:49.000000Z",
+                                        "writerprofile": {
+                                            "id": 2,
+                                            "user_id": 4,
+                                            "nickname": "LuisAng",
+                                            "principal_gender": "Emprendimiento",
+                                            "description": null,
+                                            "birth_date": "1990-01-01",
+                                            "status": "Soltero",
+                                            "created_at": "2023-07-25T01:36:06.000000Z",
+                                            "updated_at": "2023-07-25T01:36:06.000000Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not Authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Authorized"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Found"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Editar un usuario",
+                "operationId": "5f831deff7eb5fb0c401487fa1088d06",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario a actualizar",
+                        "required": true,
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "schema": "Request",
+                                "title": "Title",
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "title": "Nombre",
+                                        "description": "Nombre del Usuario",
+                                        "type": "string",
+                                        "example": "Domingo Díaz Feriado"
+                                    },
+                                    "email": {
+                                        "title": "Correo",
+                                        "description": "Correo del Usuario",
+                                        "type": "string",
+                                        "example": "ddf@gmail.com"
+                                    },
+                                    "photo": {
+                                        "title": "Imagen",
+                                        "description": "Imagen del Perfil",
+                                        "type": "file",
+                                        "format": "binary",
+                                        "nullable": true
+                                    },
+                                    "password": {
+                                        "title": "Contraseña",
+                                        "description": "Contraseña del Usuario",
+                                        "type": "string",
+                                        "pattern": "\\w{6,}",
+                                        "example": "123456"
+                                    },
+                                    "role": {
+                                        "title": "Rol",
+                                        "description": "Rol del Usuario. 1 -> Escritor y 2 -> Lector",
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "pattern": "^(1|2)$",
+                                        "example": "1"
+                                    },
+                                    "nickname": {
+                                        "title": "Apodo",
+                                        "description": "Apodo del Escritor.",
+                                        "type": "string",
+                                        "example": "LANGEL"
+                                    },
+                                    "birth_date": {
+                                        "title": "Fecha de Nacimiento",
+                                        "description": "Fecha de Nacimiento del Escritor.",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "principal_gender": {
+                                        "title": "Género Principal",
+                                        "description": "Género Principal del Escritor.",
+                                        "type": "string",
+                                        "example": "Emprendimiento"
+                                    },
+                                    "status": {
+                                        "title": "Estado",
+                                        "description": "Estado del Escritor.",
+                                        "type": "string",
+                                        "example": "Soltero"
+                                    },
+                                    "description": {
+                                        "title": "Descripción",
+                                        "description": "Descripción del Escritor.",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "favorite_gender": {
+                                        "title": "Género Favorito",
+                                        "description": "Género Favorito del Lector.",
+                                        "type": "string",
+                                        "example": "Terror"
+                                    },
+                                    "reading_hours": {
+                                        "title": "Horas de Lecturas",
+                                        "description": "Horas de Lecturas del Lector.",
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Domingo Díaz Feriado",
+                                    "email": "ddf@gmail.com",
+                                    "password": "123456",
+                                    "photo": null,
+                                    "role": 1
+                                }
+                            }
+                        },
+                        "application/json": {
+                            "schema": {},
+                            "example": {
+                                "name": "Domingo Díaz Feriado",
+                                "email": "ddl@gmail.com",
+                                "photo": null,
+                                "password": "123456",
+                                "role": 1
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Se ha actualizado el usuario correctamente",
+                                    "data": {
+                                        "message": "Se ha actualizado el usuario correctamente",
+                                        "data": {
+                                            "name": "Pedro Diaz",
+                                            "role": "2",
+                                            "email": "pedro@gmail.com",
+                                            "photo": "/storage/users/4hUQC6q4Lff6pfO68ziLx9yaPfYL8RvrYp0FnHPB.png",
+                                            "updated_at": "2023-07-25T01:04:29.000000Z",
+                                            "created_at": "2023-07-25T01:04:29.000000Z",
+                                            "id": 3
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "description": "Ha ocurrido un error al validar los datos",
+                                    "error": "El correo es requerido"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not Authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Authorized"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Found"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Eliminar Usuario",
+                "description": "Elimina un usuario",
+                "operationId": "892733a82d62df86b0731adbc2db048a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario a eliminar",
+                        "required": true,
+                        "example": "2"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Elimina el usuario satisfactoriamente"
+                    },
+                    "401": {
+                        "description": "Unahutorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Unahutorized"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not Authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Authorized"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Not Found"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },

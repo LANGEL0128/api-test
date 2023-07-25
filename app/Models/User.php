@@ -55,7 +55,7 @@ class User extends Authenticatable implements JWTSubject
             if(request()->hasFile('photo')) {
                 $o->photo = '/storage/' . request()->file('photo')->store('users', 'public');
             }
-            $o->password = Hash::make($o->password);
+            $o->password = Hash::make(request()->post('password'));
         });
 
         static::created(function($o) {
@@ -71,6 +71,31 @@ class User extends Authenticatable implements JWTSubject
                 ]);
             } else if(request()->post('role') == 2) {
                 Readerprofile::create([
+                    'user_id' => $o->id,
+                    'favorite_gender' => request()->post('favorite_gender'),
+                    'reading_hours' => request()->post('reading_hours'),
+                ]);
+            }
+        });
+
+        static::updating(function($o) {
+            if(!empty(request()->post('password'))) {
+                $o->password = Hash::make(request()->post('password'));
+            }
+        });
+
+        static::updated(function($o) {
+            if(request()->post('role') == 1) {
+                Writerprofile::where('user_id', $o->id)->update([
+                    'nickname' => request()->post('nickname'),
+                    'principal_gender' => request()->post('principal_gender'),
+                    'principal_gender' => request()->post('principal_gender'),
+                    'description' => request()->post('description'),
+                    'birth_date' => request()->post('birth_date'),
+                    'status' => request()->post('status'),
+                ]);
+            } else if(request()->post('role') == 2) {
+                Readerprofile::where('user_id', $o->id)->update([
                     'user_id' => $o->id,
                     'favorite_gender' => request()->post('favorite_gender'),
                     'reading_hours' => request()->post('reading_hours'),
@@ -102,5 +127,10 @@ class User extends Authenticatable implements JWTSubject
     public function writerprofile()
     {
         return $this->hasOne(Writerprofile::class);
+    }
+
+    public function readerprofile()
+    {
+        return $this->hasOne(Readerprofile::class);
     }
 }

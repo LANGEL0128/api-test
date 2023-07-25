@@ -89,11 +89,12 @@ class AuthController extends Controller
     *          )
     *      ),
     *      @OA\Response(
-    *          response=401,
-    *          description="Unahutorized",
+    *          response=400,
+    *          description="Bad Request",
     *          @OA\JsonContent(
     *               example={
-    *                   "message": "Unahutorized"
+    *                   "description": "Credenciales Inválidas",
+    *                   "error": "invalid_credential"
     *               }
     *          )
     *      ),
@@ -102,16 +103,19 @@ class AuthController extends Controller
     public function login()
     {
         $token = '';
-        if (
-            !User::where('email', request()->post('email'))
-            ->where('status', true)
-            ->exists() && !Hash::check(request()->post('password'))
-        ) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        } else {
-            $user = User::where('email', request()->post('email'))->first();
-            $token = auth()->login($user);
-        }
+        if(User::where('email', request()->post('email'))->where('status', 1)->exists()) {
+            $user = User::where('email', request()->post('email'))->where('status', true)->first();
+            if ( !Hash::check(request()->post('password'), $user->password) )
+                return response()->json([
+                    'description' => 'Credenciales Inválidas',
+                    'error' => 'invalid_credential'
+                ], 400);
+        } else return response()->json([
+            'description' => 'Credenciales Inválidas',
+            'error' => 'invalid_credential'
+        ], 400);
+
+        $token = auth()->login($user);
 
         return $this->respondWithToken($token);
     }
@@ -119,10 +123,10 @@ class AuthController extends Controller
     /**
     * @OA\Get(
     *      path="/api/auth/me",
-    *      operationId="Mostrar Datos del Usaurio",
+    *      operationId="Mostrar Datos del Usuario",
     *      tags={"Authentication"},
-    *      summary="Mostrar Datos del Usaurio",
-    *      description="Mostrar Datos del Usaurio logueado",
+    *      summary="Mostrar Datos del Usuario",
+    *      description="Mostrar Datos del Usuario logueado",
     *      security={{"bearerAuth":{}}},
     *      @OA\Property(
     *           property="allowedMethods",

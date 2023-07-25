@@ -2,26 +2,26 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
-
-    protected $message = 'No tiene permisos para realizar esta acción';
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return request()->post('role') == 3;
+        return auth()->user()->role == 3;
     }
 
     protected function failedAuthorization()
     {
         throw new HttpResponseException(
-            response()->json(['message' => 'No tienes permiso para realizar esta acción.'], 401)
+            response()->json(['message' => 'Not Authorized'], 403)
         );
     }
 
@@ -32,9 +32,13 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $validateEmailEdit = '';
+        $id = $this->route('id');
+        if(!empty($id))
+            $validateEmailEdit = ','.$id;
         return [
             'name' => 'required|max:254',
-            'email' => 'required|email|max:254|unique:users',
+            'email' => 'required|email|max:254|unique:users,email'.$validateEmailEdit,
             'password' => 'required|min:6|max:254',
             'role' => 'required|numeric|in:1,2',
             'favorite_gender' => Rule::requiredIf(function () {
@@ -80,5 +84,17 @@ class UserRequest extends FormRequest
             'favorite_gender.required_if' => 'El género favorito es obligatorio cuando el rol es 2',
             'reading_hours.required_if' => 'La cantidad de horas de lecturas es obligatoria cuando el rol es 2',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->first();
+
+        throw new HttpResponseException(
+            response()->json([
+                'description' => 'Ha ocurrido un error al validar los datos',
+                'error' => $errors,
+            ], 400)
+        );
     }
 }

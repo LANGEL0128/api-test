@@ -29,23 +29,24 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'auth:api',
+    'middleware' => ['auth:api', 'authadmin'],
     'prefix' => 'user'
 ], function ($router) {
-    Route::get('/', [App\Http\Controllers\AuthController::class, 'index']);
-    Route::post('/', [App\Http\Controllers\AuthController::class, 'add']);
-    Route::post('/edit/{id}', [App\Http\Controllers\AuthController::class, 'edit']);
-    Route::post('/delete/{id}', [App\Http\Controllers\AuthController::class, 'delete']);
+    Route::get('/', [App\Http\Controllers\UserController::class, 'index']);
+    Route::post('/', [App\Http\Controllers\UserController::class, 'add']);
+    Route::get('/{id}', [App\Http\Controllers\UserController::class, 'show']);
+    Route::post('/{id}', [App\Http\Controllers\UserController::class, 'edit']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\UserController::class, 'delete']);
 });
 
 Route::group([
-    'middleware' => 'auth:api',
+    'middleware' => ['auth:api', 'authwriter'],
     'prefix' => 'book'
 ], function ($router) {
     Route::get('/', [App\Http\Controllers\BookController::class, 'index']);
     Route::post('/', [App\Http\Controllers\BookController::class, 'add']);
     Route::post('/edit/{id}', [App\Http\Controllers\BookController::class, 'edit']);
-    Route::post('/delete/{id}', [App\Http\Controllers\BookController::class, 'delete']);
+    Route::get('/delete/{id}', [App\Http\Controllers\BookController::class, 'delete']);
 });
 
 
